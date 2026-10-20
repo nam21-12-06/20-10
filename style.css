@@ -1,0 +1,1062 @@
+/* ==========================================================================
+   20.10 VIETNAMESE WOMEN'S DAY - FULLY DYNAMIC & RESPONSIVE 120FPS UI
+   ========================================================================== */
+
+/* --- Custom Properties & Theme Palette --- */
+:root {
+  /* Pastel Canvas Base */
+  --bg-pastel-1: #FFF9FA;
+  --bg-pastel-2: #FFEBF3;
+  --bg-pastel-3: #FFDCE9;
+
+  /* Radiant Neon Pink & Violet Highlights */
+  --neon-pink-bright: #FF5CB8;
+  --neon-pink-electric: #FF1493;
+  --neon-pink-glow: #FF2D95;
+  --neon-magenta: #FF33A0;
+  --neon-purple: #B5179E;
+
+  /* High-Contrast, Eye-Friendly Typography */
+  --text-title: #380727;       /* Rich deep velvet plum */
+  --text-body: #23061A;        /* Ultra-sharp readable plum-black */
+  --text-sub: #5E1447;         /* Deep rose plum */
+  --text-muted: #7E2664;       /* Medium plum */
+  --text-white: #FFFFFF;
+
+  /* Card Surfaces */
+  --card-bg-solid: rgba(255, 255, 255, 0.97);
+  --card-border: rgba(255, 92, 184, 0.55);
+  --card-shadow: 0 12px 36px rgba(255, 20, 147, 0.18),
+                 0 0 24px rgba(255, 92, 184, 0.28);
+
+  /* Fonts */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* Snappy Transitions */
+  --transition-fast: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- Global Reset & Hardware-Accelerated Scrolling --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  color: var(--text-body);
+  background-color: var(--bg-pastel-1);
+  overflow-x: hidden;
+  position: relative;
+  line-height: 1.6;
+}
+
+/* Fixed Background Layer (Zero CPU/GPU Scroll Repaint) */
+.fixed-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(circle at 18% 12%, rgba(255, 45, 149, 0.22) 0%, transparent 45%),
+    radial-gradient(circle at 82% 16%, rgba(181, 23, 158, 0.18) 0%, transparent 48%),
+    radial-gradient(circle at 50% 50%, rgba(255, 92, 184, 0.12) 0%, transparent 55%),
+    radial-gradient(circle at 25% 85%, rgba(255, 20, 147, 0.18) 0%, transparent 45%),
+    linear-gradient(155deg, #FFF9FA 0%, #FFEBF3 35%, #FFDCE9 70%, #FFCADF 100%);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Static Ambient Depth Spheres */
+.ambient-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0.65;
+}
+
+.glow-top-left {
+  top: -80px;
+  left: -80px;
+  width: clamp(280px, 45vw, 420px);
+  height: clamp(280px, 45vw, 420px);
+  background: radial-gradient(circle, rgba(255, 45, 149, 0.3) 0%, transparent 70%);
+}
+
+.glow-top-right {
+  top: 40px;
+  right: -100px;
+  width: clamp(300px, 50vw, 460px);
+  height: clamp(300px, 50vw, 460px);
+  background: radial-gradient(circle, rgba(181, 23, 158, 0.25) 0%, transparent 70%);
+}
+
+.glow-bottom-center {
+  bottom: -120px;
+  left: 25%;
+  width: clamp(320px, 55vw, 500px);
+  height: clamp(320px, 55vw, 500px);
+  background: radial-gradient(circle, rgba(255, 45, 149, 0.24) 0%, transparent 70%);
+}
+
+/* --- Canvases --- */
+#hearts-canvas, #burst-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+#hearts-canvas {
+  z-index: 1;
+}
+
+#burst-canvas {
+  z-index: 99;
+}
+
+/* --- Top Navigation Bar --- */
+.top-nav-bar {
+  position: relative;
+  z-index: 10;
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: clamp(12px, 2.5vw, 18px) clamp(14px, 3vw, 24px) 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px clamp(12px, 2vw, 18px);
+  background: #FFFFFF;
+  border: 1.5px solid var(--neon-pink-bright);
+  border-radius: 30px;
+  box-shadow: 0 4px 15px rgba(255, 45, 149, 0.22);
+  font-size: clamp(0.78rem, 2.2vw, 0.86rem);
+  font-weight: 700;
+  color: var(--neon-pink-electric);
+  letter-spacing: 0.5px;
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--neon-pink-bright);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--neon-pink-electric);
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.7; }
+}
+
+.glass-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px clamp(12px, 2vw, 18px);
+  background: #FFFFFF;
+  border: 1.5px solid rgba(255, 45, 149, 0.45);
+  border-radius: 30px;
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: clamp(0.78rem, 2.2vw, 0.86rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(255, 45, 149, 0.15);
+}
+
+.glass-pill-btn:hover {
+  background: #FFF;
+  border-color: var(--neon-pink-electric);
+  box-shadow: 0 0 18px rgba(255, 45, 149, 0.45);
+  transform: translateY(-2px);
+}
+
+/* --- App Content Wrapper --- */
+.app-wrapper {
+  position: relative;
+  z-index: 5;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 10px clamp(12px, 3.5vw, 24px) 40px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 5vw, 36px);
+}
+
+/* ==========================================================================
+   3. HEADER SECTION (Dynamic Scaled Typography)
+   ========================================================================== */
+.hero-header {
+  text-align: center;
+  padding: clamp(14px, 3vw, 22px) 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.header-decor-tag {
+  display: inline-block;
+  font-size: clamp(0.76rem, 2.2vw, 0.86rem);
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--neon-pink-electric);
+  margin-bottom: 10px;
+  padding: 5px clamp(14px, 3vw, 20px);
+  background: #FFFFFF;
+  border: 1.5px solid var(--neon-pink-bright);
+  border-radius: 20px;
+  box-shadow: 0 2px 14px rgba(255, 45, 149, 0.25);
+}
+
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.title-date {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #FF1493 0%, #FF33A0 40%, #B5179E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 12px rgba(255, 20, 147, 0.45));
+}
+
+.title-name {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 5.2vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-title);
+  text-shadow: 0 1px 12px rgba(255, 255, 255, 0.9),
+               0 0 25px rgba(255, 45, 149, 0.3);
+}
+
+.hero-subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 3.2vw, 1.45rem);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--text-sub);
+  max-width: 680px;
+  margin: 0 auto 16px;
+  line-height: 1.5;
+}
+
+.header-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  max-width: min(360px, 80vw);
+}
+
+.divider-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-pink-bright), transparent);
+}
+
+.divider-gem {
+  font-size: 1.25rem;
+  filter: drop-shadow(0 0 8px var(--neon-pink-bright));
+}
+
+/* ==========================================================================
+   4. CENTERPIECE: DYNAMIC RESPONSIVE ENVELOPE, ROSE & LETTER
+   ========================================================================== */
+.centerpiece-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0 10px;
+  width: 100%;
+}
+
+.centerpiece-container {
+  width: 100%;
+  max-width: 620px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: "centerpiece";
+  place-items: center;
+  min-height: clamp(260px, 42vw, 380px);
+}
+
+/* Dynamic Responsive Envelope Scene */
+.envelope-scene {
+  grid-area: centerpiece;
+  perspective: 1200px;
+  width: 100%;
+  max-width: min(480px, 92vw);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  z-index: 10;
+  transform: translateZ(0);
+}
+
+.envelope-scene.fade-down {
+  transform: translateY(24px) scale(0.92);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.envelope-aura {
+  position: absolute;
+  width: 108%;
+  height: 118%;
+  border-radius: clamp(18px, 4vw, 28px);
+  background: radial-gradient(circle, rgba(255, 45, 149, 0.35) 0%, rgba(255, 92, 184, 0.18) 50%, transparent 75%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+/* Fluid Envelope Sizing - Proportionate at any screen width */
+.envelope-box {
+  width: 100%;
+  height: clamp(185px, 52vw, 280px);
+  position: relative;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.envelope-box:hover {
+  transform: translateY(-4px) scale(1.015);
+}
+
+.envelope-box:focus-visible {
+  box-shadow: 0 0 0 4px var(--neon-pink-bright);
+  border-radius: clamp(14px, 3vw, 18px);
+}
+
+/* Envelope Back Wall */
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #FFE4EC 0%, #FFC5D8 50%, #FFA8C5 100%);
+  border-radius: clamp(14px, 3vw, 18px);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 16px 36px rgba(255, 20, 147, 0.22),
+              0 0 25px rgba(255, 45, 149, 0.25);
+  z-index: 1;
+}
+
+/* Envelope Pocket: Percentage-based Clip-path scales dynamically */
+.envelope-pocket {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: clamp(14px, 3vw, 18px);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pocket-bottom {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #FFB8CF 0%, #FFD6E5 100%);
+  clip-path: polygon(0% 100%, 100% 100%, 50% 40%);
+  box-shadow: 0 -3px 10px rgba(255, 45, 149, 0.15);
+}
+
+.pocket-left {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #FFAEC7 0%, #FFC2D6 100%);
+  clip-path: polygon(0% 0%, 0% 100%, 52% 50%);
+  opacity: 0.94;
+}
+
+.pocket-right {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(-135deg, #FFB8CF 0%, #FFCCD9 100%);
+  clip-path: polygon(100% 0%, 100% 100%, 48% 50%);
+  opacity: 0.95;
+}
+
+/* Envelope Flap */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flap-triangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #FFB3CA 0%, #FFA2BF 60%, #FF85AA 100%);
+  clip-path: polygon(0% 0%, 100% 0%, 50% 55%);
+  filter: drop-shadow(0 4px 10px rgba(255, 45, 149, 0.2));
+  border-radius: clamp(14px, 3vw, 18px) clamp(14px, 3vw, 18px) 0 0;
+}
+
+.envelope-box.is-open .envelope-flap {
+  transform: rotateX(180deg) translateZ(-5px);
+}
+
+/* Wax Seal Button */
+.wax-seal {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(52px, 12vw, 64px);
+  height: clamp(52px, 12vw, 64px);
+  background: radial-gradient(circle at 35% 35%, #FF77BC, #FF1493 50%, #B5179E 95%);
+  border-radius: 50%;
+  box-shadow: 0 4px 18px rgba(255, 20, 147, 0.4),
+              0 0 25px var(--neon-pink-bright),
+              inset 0 2px 4px rgba(255, 255, 255, 0.8);
+  border: 2px solid #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  animation: sealPulse 2s ease-in-out infinite alternate;
+}
+
+.seal-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.seal-text {
+  font-family: var(--font-serif);
+  font-size: clamp(0.72rem, 2vw, 0.8rem);
+  font-weight: 800;
+  color: #FFF;
+  letter-spacing: 0.5px;
+}
+
+.seal-icon {
+  font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+  margin-top: 2px;
+}
+
+@keyframes sealPulse {
+  0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 18px var(--neon-pink-bright); }
+  100% { transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 0 32px var(--neon-pink-electric); }
+}
+
+.envelope-box.is-open .wax-seal {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.3);
+  pointer-events: none;
+}
+
+/* Prompt Banner */
+.envelope-prompt {
+  position: absolute;
+  bottom: clamp(-42px, -8vw, -46px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px clamp(14px, 4vw, 24px);
+  background: #FFFFFF;
+  border: 1.5px solid var(--neon-pink-bright);
+  border-radius: 25px;
+  box-shadow: 0 4px 18px rgba(255, 45, 149, 0.3);
+  white-space: nowrap;
+  font-size: clamp(0.8rem, 2.4vw, 0.92rem);
+  font-weight: 700;
+  color: var(--neon-pink-electric);
+  animation: promptFloat 2s ease-in-out infinite alternate;
+  transition: opacity 0.3s ease;
+  z-index: 6;
+}
+
+.envelope-box.is-open .envelope-prompt {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes promptFloat {
+  0% { transform: translateX(-50%) translateY(0); }
+  100% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* ==========================================================================
+   DYNAMIC ROSE BLOOMING COMPONENT (Stem completely tucked in)
+   ========================================================================== */
+.rose-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 0) scale(0.2);
+  width: clamp(180px, 46vw, 240px);
+  height: clamp(210px, 55vw, 280px);
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center bottom;
+  transition: opacity 0.35s ease;
+  will-change: transform, opacity;
+}
+
+.rose-aura {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 45, 149, 0.5) 0%, rgba(255, 92, 184, 0.25) 50%, transparent 75%);
+  filter: blur(16px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.rose-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 8px 18px rgba(255, 45, 149, 0.5));
+}
+
+.rose-flower-head .petal {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.rose-wrapper.rising {
+  opacity: 1;
+  animation: roseRiseUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.rose-wrapper.rising .rose-aura {
+  opacity: 1;
+}
+
+.rose-wrapper.blooming .rose-flower-head .petal {
+  animation: petalUnfold 1.1s cubic-bezier(0.34, 1.45, 0.64, 1) forwards;
+}
+
+.rose-wrapper.blooming .rose-stem-group {
+  animation: stemGrow 0.9s ease-out forwards;
+}
+
+.rose-wrapper.dispersed {
+  opacity: 0;
+  transform: translate(-50%, -46%) scale(1.3);
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Percentage-based vertical rise - Perfectly proportionate on Mobile and Desktop */
+@keyframes roseRiseUp {
+  0% { transform: translate(-50%, 25px) scale(0.3); opacity: 0; }
+  60% { transform: translate(-50%, -48%) scale(1.05); opacity: 1; }
+  100% { transform: translate(-50%, -44%) scale(1); opacity: 1; }
+}
+
+@keyframes petalUnfold {
+  0% { transform: scale(0.55) rotate(-10deg); opacity: 0.6; }
+  70% { transform: scale(1.08) rotate(4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes stemGrow {
+  0% { stroke-dasharray: 200; stroke-dashoffset: 200; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.p-1 { animation-delay: 0.06s; }
+.p-2 { animation-delay: 0.10s; }
+.p-3 { animation-delay: 0.14s; }
+.p-4 { animation-delay: 0.18s; }
+.p-5 { animation-delay: 0.22s; }
+.p-6 { animation-delay: 0.26s; }
+.p-7 { animation-delay: 0.30s; }
+.p-8 { animation-delay: 0.34s; }
+.p-9 { animation-delay: 0.38s; }
+
+/* ==========================================================================
+   DYNAMIC FROSTED WHITE LETTER CARD (Mobile-Perfected)
+   ========================================================================== */
+.letter-card {
+  grid-area: centerpiece;
+  width: 100%;
+  max-width: min(580px, 94vw);
+  background: var(--card-bg-solid);
+  border: 2px solid var(--neon-pink-bright);
+  border-radius: clamp(18px, 4vw, 26px);
+  padding: clamp(24px, 5vw, 38px) clamp(16px, 4vw, 34px) clamp(20px, 4vw, 32px);
+  box-shadow: 0 16px 45px rgba(255, 20, 147, 0.2),
+              0 0 28px rgba(255, 92, 184, 0.35);
+  z-index: 25;
+  opacity: 0;
+  transform: scale(0.9) translateZ(0);
+  visibility: hidden;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+              visibility 0.45s;
+}
+
+.letter-card.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateZ(0);
+}
+
+.letter-card.hidden {
+  display: none;
+}
+
+.card-ambient-rim {
+  display: none;
+}
+
+.card-header-decor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: clamp(14px, 3vw, 20px);
+}
+
+.sparkle-star {
+  color: var(--neon-pink-bright);
+  font-size: 1.15rem;
+}
+
+.card-tag {
+  font-size: clamp(0.78rem, 2.2vw, 0.86rem);
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--neon-pink-electric);
+  padding: 5px clamp(12px, 3vw, 18px);
+  background: #FFF0F6;
+  border-radius: 20px;
+  border: 1.5px solid var(--neon-pink-bright);
+}
+
+.letter-body {
+  text-align: center;
+  margin-bottom: clamp(18px, 3.5vw, 24px);
+}
+
+.letter-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 5vw, 2.45rem);
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: clamp(14px, 3vw, 20px);
+  color: var(--text-title);
+  letter-spacing: 0.5px;
+}
+
+.letter-lead {
+  font-family: var(--font-sans);
+  font-size: clamp(0.96rem, 2.8vw, 1.08rem);
+  line-height: clamp(1.65, 3.5vw, 1.85);
+  color: var(--text-body);
+  font-weight: 600;
+  margin-bottom: clamp(16px, 3vw, 22px);
+  padding: 0 4px;
+}
+
+.letter-signoff {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.15rem, 3.2vw, 1.35rem);
+  font-weight: 700;
+  color: var(--text-sub);
+}
+
+.signoff-heart {
+  color: var(--neon-pink-electric);
+  font-size: 1.4rem;
+  display: inline-block;
+  animation: heartThrob 1.6s ease-in-out infinite;
+}
+
+@keyframes heartThrob {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+/* Single Action Button */
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: clamp(14px, 3vw, 18px);
+  border-top: 1.5px dashed rgba(255, 45, 149, 0.3);
+}
+
+.btn-card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: clamp(10px, 2.5vw, 12px) clamp(24px, 6vw, 34px);
+  border-radius: 30px;
+  font-family: var(--font-sans);
+  font-size: clamp(0.9rem, 2.4vw, 1rem);
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-close-letter {
+  background: linear-gradient(135deg, var(--neon-pink-bright), var(--neon-pink-electric));
+  color: #FFFFFF;
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 4px 18px rgba(255, 20, 147, 0.4),
+              0 0 15px rgba(255, 92, 184, 0.3);
+}
+
+.btn-close-letter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255, 20, 147, 0.6),
+              0 0 20px rgba(255, 92, 184, 0.5);
+}
+
+/* ==========================================================================
+   5. BOTTOM SECTION: "SPARK OF EMPOWERMENT" QUOTE GENERATOR
+   ========================================================================== */
+.empowerment-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 5px 0;
+}
+
+.section-crystal-capsule {
+  width: 100%;
+  max-width: min(780px, 94vw);
+  background: var(--card-bg-solid);
+  border: 2px solid var(--neon-pink-bright);
+  border-radius: clamp(20px, 4vw, 32px);
+  padding: clamp(24px, 5vw, 38px) clamp(16px, 4vw, 32px) clamp(20px, 4vw, 32px);
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-crystal-capsule::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent, var(--neon-pink-bright), var(--neon-pink-electric), transparent);
+}
+
+.capsule-header {
+  text-align: center;
+  margin-bottom: clamp(18px, 3.5vw, 24px);
+}
+
+.capsule-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px clamp(12px, 3vw, 18px);
+  background: #FFF0F6;
+  border: 1.5px solid var(--neon-pink-bright);
+  border-radius: 20px;
+  font-size: clamp(0.78rem, 2.2vw, 0.84rem);
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--neon-pink-electric);
+  margin-bottom: 10px;
+}
+
+.capsule-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 5vw, 2.45rem);
+  font-weight: 800;
+  color: var(--text-title);
+  margin-bottom: 6px;
+}
+
+.capsule-subtitle {
+  font-size: clamp(0.88rem, 2.6vw, 1rem);
+  font-weight: 600;
+  color: var(--text-sub);
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* Interactive Generator Button */
+.generator-button-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: clamp(18px, 3.5vw, 26px);
+  width: 100%;
+}
+
+.magic-generator-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: min(100%, 460px);
+  padding: clamp(13px, 3vw, 16px) clamp(16px, 4vw, 36px);
+  border-radius: 40px;
+  background: linear-gradient(135deg, #FF5CB8 0%, #FF1493 30%, #FF2D95 65%, #B5179E 100%);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: clamp(0.92rem, 3vw, 1.1rem);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border: 2px solid #FFFFFF;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 6px 26px rgba(255, 20, 147, 0.5),
+              0 0 25px rgba(255, 92, 184, 0.4);
+  transition: var(--transition-fast);
+  user-select: none;
+  text-align: center;
+  white-space: normal;
+}
+
+.btn-glow-aura {
+  position: absolute;
+  inset: -6px;
+  border-radius: 45px;
+  background: radial-gradient(circle, rgba(255, 92, 184, 0.7) 0%, rgba(255, 20, 147, 0.45) 60%, transparent 80%);
+  filter: blur(10px);
+  z-index: -1;
+  opacity: 0.8;
+}
+
+.btn-shimmer-sweep {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+  transform: skewX(-25deg);
+  animation: btnShimmer 3s infinite;
+}
+
+@keyframes btnShimmer {
+  0% { left: -120%; }
+  35%, 100% { left: 180%; }
+}
+
+.magic-generator-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 32px rgba(255, 20, 147, 0.65),
+              0 0 35px rgba(255, 92, 184, 0.6);
+}
+
+.magic-generator-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-sparkle-left, .btn-sparkle-right {
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  filter: drop-shadow(0 0 6px #FFF);
+}
+
+.btn-subtip {
+  margin-top: 10px;
+  font-size: clamp(0.78rem, 2.2vw, 0.86rem);
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+/* Floating High-Contrast Quote Card Display */
+.quote-display-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1.5px solid var(--neon-pink-bright);
+  border-radius: clamp(16px, 3.5vw, 24px);
+  padding: clamp(18px, 4vw, 28px) clamp(14px, 3.5vw, 26px) clamp(14px, 3vw, 20px);
+  box-shadow: 0 10px 30px rgba(255, 20, 147, 0.12),
+              0 0 22px rgba(255, 92, 184, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.quote-card-glow {
+  display: none;
+}
+
+.quote-meta-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 10px;
+}
+
+.quote-theme-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(0.78rem, 2.2vw, 0.86rem);
+  font-weight: 800;
+  color: var(--neon-pink-electric);
+  background: #FFF0F6;
+  padding: 4px clamp(10px, 2.5vw, 16px);
+  border-radius: 16px;
+  border: 1.5px solid var(--neon-pink-bright);
+}
+
+.quote-content-area {
+  position: relative;
+  z-index: 1;
+  padding: 2px 4px;
+  margin-bottom: 12px;
+}
+
+.quote-mark-open, .quote-mark-close {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 6vw, 3rem);
+  line-height: 1;
+  color: var(--neon-pink-bright);
+  opacity: 0.65;
+  user-select: none;
+}
+
+.quote-mark-open {
+  display: block;
+  margin-bottom: -15px;
+}
+
+.quote-mark-close {
+  display: block;
+  text-align: right;
+  margin-top: -15px;
+}
+
+.quote-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 3.6vw, 1.48rem);
+  font-weight: 700;
+  line-height: 1.65;
+  color: var(--text-body);
+  text-align: center;
+  padding: 0 4px;
+  min-height: 55px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.quote-text.is-switching {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.quote-footer-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  padding-top: 12px;
+  border-top: 1.5px solid rgba(255, 45, 149, 0.2);
+}
+
+.quote-author-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(0.78rem, 2.3vw, 0.9rem);
+  font-weight: 700;
+  color: var(--text-sub);
+  text-align: center;
+}
+
+/* ==========================================================================
+   FOOTER (Clean & Simple)
+   ========================================================================== */
+.app-footer {
+  text-align: center;
+  padding: 10px 10px 30px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-heart-pulse {
+  font-size: 1.8rem;
+  animation: heartThrob 2s infinite ease-in-out;
+  filter: drop-shadow(0 0 10px var(--neon-pink-bright));
+}
+
+.footer-text {
+  font-size: clamp(0.88rem, 2.6vw, 1rem);
+  font-weight: 700;
+  color: var(--text-sub);
+  max-width: 620px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   KEYFRAMES
+   ========================================================================== */
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>20.10 Vietnamese Women's Day • Glowing Celebration</title>
+    <meta
+      name="description"
+      content="A magical, modern celebration of 20.10 Vietnamese Women's Day featuring interactive blooming rose, glassmorphism letter, and empowerment quotes."
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Fixed Background Layer (Zero Scroll Repaint / Silky Smooth 120fps) -->
+    <div class="fixed-bg" aria-hidden="true">
+      <div class="ambient-glow glow-top-left"></div>
+      <div class="ambient-glow glow-top-right"></div>
+      <div class="ambient-glow glow-bottom-center"></div>
+    </div>
+
+    <!-- Background Sparse Falling Hearts Canvas -->
+    <canvas id="hearts-canvas" aria-hidden="true"></canvas>
+
+    <!-- Foreground Particle & Petal Burst Canvas -->
+    <canvas id="burst-canvas" aria-hidden="true"></canvas>
+
+    <!-- Top Floating Controls Bar -->
+    <div class="top-nav-bar">
+      <div class="date-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-text">20 Tháng 10 • Ngày Phụ Nữ Việt Nam</span>
+      </div>
+      <div class="top-actions">
+        <button
+          id="sound-toggle-btn"
+          class="glass-pill-btn"
+          aria-label="Bật/Tắt âm thanh hiệu ứng"
+          title="Âm thanh hiệu ứng ma thuật"
+        >
+          <span class="sound-icon" id="sound-icon">🔔</span>
+          <span class="sound-label" id="sound-label">Âm thanh: Bật</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Scrollable App Container -->
+    <div class="app-wrapper">
+      <!-- Header Section -->
+      <header class="hero-header">
+        <div class="header-decor-tag">✨ Tôn Vinh Vẻ Đẹp & Bản Lĩnh ✨</div>
+        <h1 class="hero-title">
+          <span class="title-date">20.10</span>
+          <span class="title-name">Vietnamese Women's Day</span>
+        </h1>
+        <p class="hero-subtitle">
+          "Celebrating the grace, strength, and beauty of Vietnamese women"
+        </p>
+        <div class="header-divider">
+          <span class="divider-line"></span>
+          <span class="divider-gem">🌸</span>
+          <span class="divider-line"></span>
+        </div>
+      </header>
+
+      <!-- Centerpiece Section: Envelope, Blooming Rose & Letter -->
+      <section
+        class="centerpiece-section"
+        id="centerpiece-section"
+        aria-label="Interactive Envelope and Letter"
+      >
+        <div class="centerpiece-container">
+          <!-- Interactive Envelope -->
+          <div class="envelope-scene" id="envelope-scene">
+            <div class="envelope-aura"></div>
+
+            <div
+              class="envelope-box"
+              id="envelope-box"
+              role="button"
+              tabindex="0"
+              aria-label="Mở phong thư chúc mừng 20/10"
+              aria-expanded="false"
+            >
+              <!-- Envelope Back Wall -->
+              <div class="envelope-back"></div>
+
+              <!-- Blooming Rose Component (Housed inside envelope) -->
+              <div class="rose-wrapper" id="rose-wrapper" aria-hidden="true">
+                <div class="rose-aura"></div>
+
+                <!-- SVG Rose Graphic with ultra-bright neon pink petals -->
+                <svg
+                  class="rose-svg"
+                  id="rose-svg"
+                  viewBox="0 0 300 360"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <radialGradient id="roseCore" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#FFFFFF" />
+                      <stop offset="25%" stop-color="#FFF0F7" />
+                      <stop offset="60%" stop-color="#FF2D95" />
+                      <stop offset="100%" stop-color="#FF1493" />
+                    </radialGradient>
+
+                    <linearGradient
+                      id="petalGrad1"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stop-color="#FF85C4" />
+                      <stop offset="45%" stop-color="#FF2D95" />
+                      <stop offset="100%" stop-color="#FF1493" />
+                    </linearGradient>
+
+                    <linearGradient
+                      id="petalGrad2"
+                      x1="100%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stop-color="#FFB0DA" />
+                      <stop offset="50%" stop-color="#FF5CB8" />
+                      <stop offset="100%" stop-color="#FF1493" />
+                    </linearGradient>
+
+                    <linearGradient
+                      id="petalGrad3"
+                      x1="0%"
+                      y1="50%"
+                      x2="100%"
+                      y2="50%"
+                    >
+                      <stop offset="0%" stop-color="#FF80BF" />
+                      <stop offset="60%" stop-color="#FF2D95" />
+                      <stop offset="100%" stop-color="#D800A6" />
+                    </linearGradient>
+
+                    <linearGradient
+                      id="stemGrad"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stop-color="#55D88A" />
+                      <stop offset="50%" stop-color="#2D9A5B" />
+                      <stop offset="100%" stop-color="#1B5E38" />
+                    </linearGradient>
+
+                    <linearGradient
+                      id="leafGrad"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stop-color="#80E8A8" />
+                      <stop offset="60%" stop-color="#48B878" />
+                      <stop offset="100%" stop-color="#226B40" />
+                    </linearGradient>
+
+                    <filter
+                      id="neonGlow"
+                      x="-20%"
+                      y="-20%"
+                      width="140%"
+                      height="140%"
+                    >
+                      <feDropShadow
+                        dx="0"
+                        dy="0"
+                        stdDeviation="4"
+                        flood-color="#FF1493"
+                        flood-opacity="0.8"
+                      />
+                    </filter>
+                  </defs>
+
+                  <!-- Stem and Leaves (Safely tucked inside envelope pocket) -->
+                  <g class="rose-stem-group">
+                    <path
+                      class="rose-stem"
+                      d="M150 150 Q149 180 151 215"
+                      stroke="url(#stemGrad)"
+                      stroke-width="6.5"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      class="rose-leaf leaf-left"
+                      d="M149 185 C122 176 102 195 95 210 C115 220 138 210 149 195 Z"
+                      fill="url(#leafGrad)"
+                      stroke="#52B788"
+                      stroke-width="1.5"
+                    />
+                    <path
+                      class="rose-leaf leaf-right"
+                      d="M151 175 C176 166 198 182 205 198 C185 208 162 198 151 185 Z"
+                      fill="url(#leafGrad)"
+                      stroke="#52B788"
+                      stroke-width="1.5"
+                    />
+                  </g>
+
+                  <!-- Rose Bloom Petal Layers -->
+                  <g class="rose-flower-head" filter="url(#neonGlow)">
+                    <path
+                      class="petal p-outer p-1"
+                      d="M150 145 C95 145 65 110 80 65 C110 30 150 55 150 80 Z"
+                      fill="url(#petalGrad1)"
+                      stroke="#FFF0F7"
+                      stroke-width="0.8"
+                    />
+                    <path
+                      class="petal p-outer p-2"
+                      d="M150 145 C205 145 235 110 220 65 C190 30 150 55 150 80 Z"
+                      fill="url(#petalGrad2)"
+                      stroke="#FFF0F7"
+                      stroke-width="0.8"
+                    />
+                    <path
+                      class="petal p-outer p-3"
+                      d="M150 160 C80 160 65 95 105 75 C145 55 150 90 150 110 Z"
+                      fill="url(#petalGrad3)"
+                      stroke="#FFF0F7"
+                      stroke-width="0.8"
+                    />
+                    <path
+                      class="petal p-outer p-4"
+                      d="M150 160 C220 160 235 95 195 75 C155 55 150 90 150 110 Z"
+                      fill="url(#petalGrad1)"
+                      stroke="#FFF0F7"
+                      stroke-width="0.8"
+                    />
+
+                    <path
+                      class="petal p-mid p-5"
+                      d="M150 140 C110 140 85 90 120 60 C145 40 155 75 150 95 Z"
+                      fill="url(#petalGrad2)"
+                      stroke="#FFF"
+                      stroke-width="0.7"
+                    />
+                    <path
+                      class="petal p-mid p-6"
+                      d="M150 140 C190 140 215 90 180 60 C155 40 145 75 150 95 Z"
+                      fill="url(#petalGrad3)"
+                      stroke="#FFF"
+                      stroke-width="0.7"
+                    />
+                    <path
+                      class="petal p-mid p-7"
+                      d="M150 150 C115 150 100 105 130 85 C155 70 165 95 150 115 Z"
+                      fill="url(#petalGrad1)"
+                      stroke="#FFF"
+                      stroke-width="0.7"
+                    />
+
+                    <path
+                      class="petal p-inner p-8"
+                      d="M150 130 C125 130 115 95 135 80 C150 70 160 85 150 100 Z"
+                      fill="url(#roseCore)"
+                    />
+                    <path
+                      class="petal p-inner p-9"
+                      d="M150 130 C175 130 185 95 165 80 C150 70 140 85 150 100 Z"
+                      fill="url(#petalGrad2)"
+                    />
+
+                    <ellipse
+                      class="petal-core"
+                      cx="150"
+                      cy="98"
+                      rx="22"
+                      ry="26"
+                      fill="url(#roseCore)"
+                    />
+                    <path
+                      class="petal-spiral"
+                      d="M142 94 C140 86 156 84 158 92 C160 102 142 104 145 110 C148 114 155 110 154 105"
+                      stroke="#FFFFFF"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      fill="none"
+                    />
+                    <circle cx="150" cy="98" r="4.5" fill="#FFFFFF" />
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Envelope Pocket Layers -->
+              <div class="envelope-pocket">
+                <div class="pocket-bottom"></div>
+                <div class="pocket-left"></div>
+                <div class="pocket-right"></div>
+              </div>
+
+              <!-- Envelope Top Flap -->
+              <div class="envelope-flap" id="envelope-flap">
+                <div class="flap-triangle"></div>
+                <!-- Wax Seal Button -->
+                <div
+                  class="wax-seal"
+                  id="wax-seal"
+                  title="Chạm để mở phong thư"
+                >
+                  <div class="seal-inner">
+                    <span class="seal-text">20/10</span>
+                    <span class="seal-icon">🌹</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Click Prompt Tag -->
+              <div class="envelope-prompt" id="envelope-prompt">
+                <span class="prompt-text">✨ Click to open ✨</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Frosted White Letter Card (High Contrast, Ultra-Legible) -->
+          <article
+            class="letter-card hidden"
+            id="letter-card"
+            aria-label="Thư chúc mừng 20/10"
+          >
+            <div class="card-ambient-rim"></div>
+
+            <!-- Decorative Top Flourish -->
+            <div class="card-header-decor">
+              <span class="sparkle-star">✦</span>
+              <span class="card-tag">Gửi người phụ nữ tuyệt vời</span>
+              <span class="sparkle-star">✦</span>
+            </div>
+
+            <!-- Letter Main Content (Sharp, Highly Legible Text) -->
+            <div class="letter-body">
+              <h2 class="letter-title">Happy 20.10 Vietnamese Women's Day!</h2>
+
+              <div class="letter-paragraphs">
+                <p class="letter-lead">
+                  Today is all about celebrating your grace, resilience, and
+                  endless warmth. Thank you for bringing light, beauty, and
+                  strength into every single moment. May your days always be
+                  filled with joy, love, and the courage to chase your dreams.
+                  Keep shining brightly!
+                </p>
+              </div>
+
+              <div class="letter-signoff">
+                <span class="signoff-quote">With love & appreciation</span>
+                <span class="signoff-heart">♥</span>
+              </div>
+            </div>
+
+            <!-- Single Action Button: Đóng Thư (Close) Only -->
+            <div class="card-actions">
+              <button
+                class="btn-card-action btn-close-letter"
+                id="close-letter-btn"
+                title="Gấp lại phong thư"
+              >
+                <span class="btn-icon">✉️</span>
+                <span class="btn-text">Close</span>
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Bottom Section: "Spark of Empowerment" Quote Generator -->
+      <section
+        class="empowerment-section"
+        id="empowerment-section"
+        aria-label="Random Vietnamese Quote Generator"
+      >
+        <div class="section-crystal-capsule">
+          <!-- Crystal Capsule Header -->
+          <div class="capsule-header">
+            <div class="capsule-badge">
+              <span class="capsule-badge-icon">✨</span>
+              <span class="capsule-badge-text">Spark of Empowerment</span>
+            </div>
+            <h2 class="capsule-title">Tia Sáng Truyền Cảm Hứng</h2>
+            <p class="capsule-subtitle">
+              Mỗi người phụ nữ là một kiệt tác của tạo hóa
+            </p>
+          </div>
+
+          <!-- Interactive Magical Button -->
+          <div class="generator-button-wrap">
+            <button
+              class="magic-generator-btn"
+              id="magic-quote-btn"
+              aria-label="Gửi ngàn lời chúc yêu thương"
+            >
+              <div class="btn-glow-aura"></div>
+              <div class="btn-shimmer-sweep"></div>
+              <span class="btn-sparkle-left">✨</span>
+              <span class="btn-main-label"
+                >✨ Gửi Ngàn Lời Chúc Yêu Thương ✨</span
+              >
+              <span class="btn-sparkle-right">✨</span>
+            </button>
+            <div class="btn-subtip"></div>
+          </div>
+
+          <!-- Floating High-Contrast Quote Card Display -->
+          <div class="quote-display-card" id="quote-display-card">
+            <div class="quote-card-glow"></div>
+
+            <div class="quote-meta-row">
+              <!-- Simplified: Only displays theme category e.g. 🌸 Nội Lực Vượt Bậc -->
+              <div class="quote-theme-pill" id="quote-theme-pill">
+                <span class="theme-dot">🌸</span>
+                <span id="quote-category">Tôn Vinh Bản Lĩnh</span>
+              </div>
+            </div>
+
+            <div class="quote-content-area">
+              <span class="quote-mark-open" aria-hidden="true">“</span>
+              <p class="quote-text" id="quote-text">
+                Phụ nữ giống như những đóa hoa, mỗi người đều mang một hương sắc
+                riêng biệt. Hãy luôn tự tin nở rộ rực rỡ nhất theo cách của
+                chính mình!
+              </p>
+              <span class="quote-mark-close" aria-hidden="true">”</span>
+            </div>
+
+            <div class="quote-footer-row">
+              <div class="quote-author-tag">
+                <span class="author-icon">🌟</span>
+                <span>Tôn vinh Người Phụ Nữ Việt Nam • 20.10</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <div class="footer-heart-pulse">💖</div>
+        <p class="footer-text">Chúc mừng Ngày Phụ Nữ Việt Nam 20.10</p>
+        <p class="footer-text">
+          Chúc bạn luôn rạng rỡ, tự tin và hạnh phúc vẹn tròn!
+        </p>
+      </footer>
+    </div>
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+  </body>
+</html>
